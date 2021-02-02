@@ -24,78 +24,71 @@ window.addEventListener('submit', event => {
 //declares validate function;  formIsValid equals true, run confirmValidForm function
 function validate() {
     console.log('validate just ran');
-    validateCardNumber(number)
-    // luhnCheck(number)
     formIsValid = true;
     confirmValidForm()
 }
 
 //
 function confirmValidForm() {
-    console.log('confirmValidForm just ran')
-    if (formIsValid  && form.checkValidity()){
-        const validMsgEl = document.querySelector('#total')
-        validMsgEl.innerText = totalExpense()
+    console.log('confirmValidForm just ran') // confirms function runs
+    if (formIsValid  && form.checkValidity()){ // if these are both true, 
+        const validMsgEl = document.querySelector('#total') // set validMsgEl = '#total'
+        validMsgEl.innerText = totalExpense() // populate #total with validMsgEl innerText
     } else {
-        console.log('Problem with form')
+        console.log('Problem with form') //and if it can't display there's a problem w/ form in console
     }
 }
 
-function totalExpense() {
-    console.log('totalExpense just ran')
-    const totalDays = document.querySelector('#days').value
-    console.log('totaldays: ', totalDays)
-    let startDate = document.querySelector('#start-date').valueAsDate
-    let startDay = startDate.getDay()
-    console.log("day of the week", startDay)
-    console.log("start date", typeof startDate, startDate)
-    getParkingDates(startDate, totalDays)
-    //pulling date for rest of function
-    startDate = document.querySelector('#start-date').value
-    console.log("startDate should be ", startDate)
+function totalExpense() { // declares totalExpense function
+    console.log('totalExpense just ran') // confirms totalExpense function ran
+    const totalDays = parseInt(document.querySelector('#days').value, 10); // declares totalDays as equal to the Integer value of #days in base 10
+    console.log("total days is" , totalDays) // confirms that totalDays is what we think it is
+    let startDate = document.querySelector('#start-date'); // sets startDate equal to ID start-date
+    let days = [] // creates days array
+    let day = new Date(startDate) // declares day as each Date
 
-    let fullPrice = totalDays * price;
-    return `Total cost: ${fullPrice}`;
-}
-
-function getParkingDates(startDate, numOfDays) {
-    let copyEndDate = new Date(Number(startDate))
-    console.log("number of days", numOfDays)
-    let dayArray = []
-    dayArray.push(startDate.getDay())
-    console.log("day array", dayArray)
-    for (let i = 1; i <= numOfDays; i++) {
-        endDate = copyEndDate.setDate(startDate.getDate() + i)
-        endDay = new Date(endDate).getDay()
-        dayArray.push(endDay)
-        console.log("the end day's number code value is: ", endDay, i)
+    for (let i = 1; i <= totalDays; i++) { // makes a loop on totalDays
+        day = new Date(day.setDate(day.getDate() +1)) //
+        days.push(day.getDay())
     }
+    return days // return new array [days]
+    .map(day => (day > 0 && day < 6 ? 5:7)) // perform .map() on days => days.map()
+    .reduce((fullPrice, cost) => { // now perform .reduce on result reducing array down to sum for total price
+        return (fullPrice += cost)
 
-    console.log("day array", dayArray)
+    }, 0)
 }
 
-function validateCardNumber(number) {
-    var regex = new RegExp("^[0-9]{16}$");
-    if (!regex.test(number))
-        return false;
 
-    return luhnCheck(number);
-}
 
-function luhnCheck(val) {
-    var sum = 0;
-    for (var i = 0; i < val.length; i++) {
-        var intVal = parseInt(val.substr(i, 1));
-        if (i % 2 == 0) {
-            intVal *= 2;
-            if (intVal > 9) {
-                intVal = 1 + (intVal % 10);
-            }
-        }
-        sum += intVal;
-    }
-    return (sum % 10) == 0;
-}
+
+
+
+
+
+// Rebecca's work through on Sunday
+// function getParkingDates(startDate, numOfDays) {
+//     let copyEndDate = new Date(Number(startDate))
+//     console.log("number of days", numOfDays)
+//     let dayArray = []
+//     dayArray.push(startDate.getDay())
+//     console.log("day array", dayArray)
+//     for (let i = 1; i <= numOfDays; i++) {
+//         endDate = copyEndDate.setDate(startDate.getDate() + i)
+//         endDay = new Date(endDate).getDay()
+//         dayArray.push(endDay)
+//         console.log("the end day's number code value is: ", endDay, i)
+//     }
+
+// //     console.log("day array", dayArray)
+// }
+
+ // let startDay = startDate.getDay();
+    // console.log("day of the week", startDay);
+    // console.log("start date", typeof startDate, startDate);
+    // getParkingDate(startDate, totalDays);
+    // let fullPrice = totalDays * price;
+    // return `Your total cost is $ ${fullPrice}`
 
 
 // function dynamicPrice (dayArray) {
